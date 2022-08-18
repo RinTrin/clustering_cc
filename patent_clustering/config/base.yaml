@@ -1,0 +1,3 @@
+data:
+  home_dir: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/data"
+  brf_sum_text_path: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/data/brf_sum_text/2005.json"

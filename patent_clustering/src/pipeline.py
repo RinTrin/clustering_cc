@@ -1,3 +1,4 @@
+from cgitb import text
 import os
 import numpy as np
 import pandas as pd
@@ -7,17 +8,36 @@ import convert_config
 import check_similarity
 
 from make_feature import make_feature
+from data_utils import add_subsection, extract_json
 
 
 def pipeline(opt):
 
-    # using only 2005 data for test
-    with open(opt.data.brf_sum_text_path, "r") as jf:
-        text_data = json.load(jf)
+    if opt.test.debug:
+        print("loading brief sum text json data")
+        with open(opt.test.brf_sum_text_path, "r") as jf:
+            text_data = json.load(jf)
+        # with open(opt.data.brf_sum_text_path, "r") as jf:
+        #     text_data = json.load(jf)
+        print("load data finish")
+        # extract_json(opt, text_data, 2021)
 
-    features_dict = make_feature(text_data)
+        # add_subsection(opt, text_data) # <- うまくいかない
 
-    check_similarity(features_dict)
+        # njk
+        features_dict = make_feature(opt, text_data=text_data)
+
+    else:
+        # real dev
+        # # using only 2021 data for test
+        print("loading brief sum text json data")
+        with open(opt.data.brf_sum_text_path, "r") as jf:
+            text_data = json.load(jf)
+        print("load data finish")
+
+        features_dict = make_feature(opt, text_data=text_data)
+
+    check_similarity.check_similarity(opt, features_dict)
 
 
 if __name__ == "__main__":

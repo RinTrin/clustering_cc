@@ -16,17 +16,20 @@ def get_data(opt):
     # brf_sum_text_folder = "/content/brf_sum_text_folder/"
     brf_sum_text_folder = os.path.join(opt.data.home_dir, "brf_sum_text")
     os.makedirs(brf_sum_text_folder, exist_ok=True)
-    for year in range(2005, 2022):
-        if year >= 2006:
-            break
+    for year in range(2021, 2022):
+        # for year in range(2005, 2022):
+        # if year >= 2006:
+        #     break
         json_path = os.path.join(brf_sum_text_folder, f"{str(year)}.json")
         if os.path.exists(json_path):
             print(f"year :{year} of json already exists!!")
             continue
         else:
             print(f"year :{year} isn't exist. Let's make")
-        url_path_each = f"https://s3.amazonaws.com/data.patentsview.org/pregrant_publications/brf_sum_text_{str(year)}.tsv.zip"
+        print("using granted data, not pre-granted")
+        url_path_each = f"https://s3.amazonaws.com/data.patentsview.org/brief-summary-text/brf_sum_text_{str(year)}.tsv.zip"
         response = requests.get(url_path_each, stream=True)
+
         if "200" == str(response.status_code):
             print(f"year :{year} is succesfully accessed")
         else:
@@ -40,18 +43,19 @@ def get_data(opt):
                 delimiter="\t",
                 quoting=csv.QUOTE_NONNUMERIC,
                 chunksize=1000,
-                dtype={
-                    "id": np.object,
-                    "document_number": np.object,
-                    "text": np.object,
-                },
+                # dtype={
+                #     "id": np.object,
+                #     "document_number": np.object,
+                #     "text": np.object,
+                # },
             )
             df = pd.concat((r for r in df_reader), ignore_index=True)
+            print(df.columns)
             json_dict = {}
             for idx in tqdm(range(len(df.index))):
                 row = df.iloc[idx, :]
                 each_dict = {}
-                for label in ["id", "document_number", "text"]:
+                for label in df.columns:  # ["id", "document_number", "text"]:
                     each_dict[label] = row[label]
                 json_dict[idx] = each_dict
             with open(json_path, "w") as jf:

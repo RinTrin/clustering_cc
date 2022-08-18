@@ -1,3 +1,18 @@
 data:
   home_dir: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/data"
-  brf_sum_text_path: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/data/brf_sum_text/2005.json"
+  brf_sum_text_path: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/data/brf_sum_text/2021.json" # 330645 unique data
+
+debug:
+  home_dir: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/debug"
+
+clustering:
+  kmeans_max_k: 20
+  find_optimal_clusters: False 
+  
+plot:
+  pca_components: 50
+  tsne_components: 50
+
+test: 
+  debug: True
+  brf_sum_text_path: "/home/kento/tomita/my_ML/clustering_cc/patent_clustering/data/brf_sum_text/test_2021.json"
